@@ -1,4 +1,4 @@
-import { IconButton, Box, useTheme } from "@mui/material";
+import { IconButton, Box, useTheme, alpha } from "@mui/material";
 import {
   PlayArrow as PlayIcon,
   Pause as PauseIcon,
@@ -10,6 +10,7 @@ import {
   FavoriteBorder as FavoriteBorderIcon,
 } from "@mui/icons-material";
 import { LoopMode } from "./types";
+import CircleIcon from "@mui/icons-material/Circle";
 
 type ControlProps = {
   isPlaying: boolean;
@@ -38,9 +39,16 @@ export default function Controls({
 
   const baseIconColor = isDark ? "#ddd" : "#444";
   const hoverColor = isDark
-    ? theme.palette.primary.light
-    : theme.palette.primary.dark;
+    ? alpha(theme.palette.primary.light, 0.8)
+    : alpha(theme.palette.primary.dark, 0.8);
   const activeColor = theme.palette.primary.main;
+
+  const iconButtonSx = {
+    "&:hover": { color: hoverColor },
+    [theme.breakpoints.down("sm")]: {
+      padding: theme.spacing(2), // bigger touch target on mobile
+    },
+  };
 
   return (
     <Box
@@ -54,20 +62,59 @@ export default function Controls({
       <IconButton
         onClick={onToggleLoop}
         sx={{
+          ...iconButtonSx,
           color: loopMode !== LoopMode.Off ? activeColor : baseIconColor,
-          "&:hover": { color: hoverColor },
+          position: "relative",
+          "& svg": {
+            transition: "filter 0.2s ease-in-out",
+          },
         }}
       >
         {loopMode === LoopMode.One ? (
-          <RepeatOneIcon fontSize="small" />
+          <>
+            <RepeatOneIcon fontSize="small" />
+            {loopMode === LoopMode.One && (
+              <CircleIcon
+                sx={{
+                  fontSize: 5,
+                  position: "absolute",
+                  bottom: {
+                    xs: 10, // mobile
+                    sm: 4, // desktop+
+                  },
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  color: activeColor,
+                }}
+              />
+            )}
+          </>
         ) : (
-          <RepeatIcon fontSize="small" />
+          <>
+            <RepeatIcon fontSize="small" />
+            {loopMode === LoopMode.All && (
+              <CircleIcon
+                sx={{
+                  fontSize: 5,
+                  position: "absolute",
+                  bottom: {
+                    xs: 10, // mobile
+                    sm: 4, // desktop+
+                  },
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  color: activeColor,
+                }}
+              />
+            )}
+          </>
         )}
       </IconButton>
 
       <IconButton
         onClick={() => onPrev(true)}
         sx={{
+          ...iconButtonSx,
           color: baseIconColor,
           "&:hover": { color: hoverColor },
         }}
@@ -77,6 +124,7 @@ export default function Controls({
       <IconButton
         onClick={onPlayPause}
         sx={{
+          ...iconButtonSx,
           color: baseIconColor,
           "&:hover": { color: hoverColor },
         }}
@@ -90,6 +138,7 @@ export default function Controls({
       <IconButton
         onClick={() => onNext(true)}
         sx={{
+          ...iconButtonSx,
           color: baseIconColor,
           "&:hover": { color: hoverColor },
         }}
@@ -100,6 +149,7 @@ export default function Controls({
       <IconButton
         onClick={onToggleLike}
         sx={{
+          ...iconButtonSx,
           color: liked ? activeColor : baseIconColor,
           "&:hover": { color: hoverColor },
         }}

@@ -9,6 +9,9 @@ const SeekerSlider = styled(Slider)<{ buffered?: number; duration?: number }>(
       color: "transparent", // 👈 prevent MUI default blue
       height: 4,
       padding: 0,
+      [theme.breakpoints.down("sm")]: {
+        padding: 0, // ensure no vertical padding on mobile
+      },
       "& .MuiSlider-rail": {
         opacity: 1,
         height: 4,

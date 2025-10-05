@@ -225,8 +225,8 @@ export default function Player({ tracks }: PlayerProps) {
         flexDirection: "column",
         alignItems: "stretch",
         width: 350,
-        p: 3,
-        pb: 3.5,
+        p: 2,
+        // pb: 2,
         borderRadius: 3,
         bgcolor:
           theme.palette.mode === "dark"
